@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #a9a8aa;
+            color: #333;
+            text-align: center;
+            overflow: hidden; /* Hide overflow from hearts */
+        }
+        .container {
+            background-color: #ef6b6b;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+            position: relative; /* For z-index */
+            z-index: 10; /* Ensure container is above hearts */
+        }
+        h1 {
+            color: #e91e63;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        #yesButton {
+            background-color: #e91e63; /* Pink color */
+            color: rgb(202, 45, 134);
+        }
+        #yesButton:hover {
+            background-color: #c2185b; /* Darker pink on hover */
+            transform: translateY(-3px);
+        }
+        #noButton {
+            background-color: #180504;
+            color: rgb(202, 45, 134);
+        }
+        #noButton:hover {
+            background-color: #2f0d0a;
+            transform: translateY(-3px);
+        }
+
+        /* Heart styles */
+        .heart {
+            position: absolute;
+            background-color: #ff0055;
+            transform: rotate(-45deg);
+            animation: floatUp 5s infinite ease-in-out;
+            z-index: 1; /* Ensure hearts are behind the container */
+            bottom: 0; /* Start from the bottom of the page */
+        }
+        .heart:before,
+        .heart:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #e91e63;
+            border-radius: 50%;
+        }
+        .heart:before {
+            top: -50%;
+            left: 0;
+        }
+        .heart:after {
+            top: 0;
+            left: 50%;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(-45deg) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(-45deg) scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Will you be my girlfriend?</h1>
+        <div class="buttons">
+            <button id="yesButton">Yes</button>
+            <button id="noButton">No</button>
+        </div>
+    </div>
+
+    <script>
+        const yesButton = document.getElementById('yesButton');
+        const noButton = document.getElementById('noButton');
+        let yesFontSize = 1.2; // Initial font size for Yes button
+        let noFontSize = 1.2;  // Initial font size for No button
+
+        noButton.addEventListener('click', () => {
+            yesFontSize += 0.3; // Increase Yes button font size
+            noFontSize -= 0.3;  // Decrease No button font size
+
+            yesButton.style.fontSize = `${yesFontSize}em`;
+            yesButton.style.padding = `${15 + (yesFontSize - 1.2) * 10}px ${30 + (yesFontSize - 1.2) * 20}px`; // Adjust padding
+
+            if (noFontSize <= 0.1) {
+                noButton.style.display = 'none'; // Hide No button completely
+            } else {
+                noButton.style.fontSize = `${noFontSize}em`;
+                noButton.style.padding = `${15 + (noFontSize - 1.2) * 10}px ${30 + (noFontSize - 1.2) * 20}px`; // Adjust padding
+            }
+        });
+
+        yesButton.addEventListener('click', () => {
+            alert('I will make you happy!');
+        });
+
+        // Heart generation logic
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.width = `${Math.random() * 20 + 10}px`; // Random size between 10px and 30px
+            heart.style.height = heart.style.width;
+            heart.style.left = `${Math.random() * 100}vw`; // Random horizontal position
+            heart.style.animationDuration = `${Math.random() * 3 + 3}s`; // Random duration between 3s and 6s
+            heart.style.animationDelay = `${Math.random() * 2}s`; // Random delay
+            document.body.appendChild(heart);
+
+            // Remove heart after animation to prevent DOM clutter
+            heart.addEventListener('animationend', () => {
+                heart.remove();
+            });
+        }
+
+        // Generate hearts periodically
+        setInterval(createHeart, 100); // Create a new heart every 100ms
+    </script>
+</body>
+</html>
